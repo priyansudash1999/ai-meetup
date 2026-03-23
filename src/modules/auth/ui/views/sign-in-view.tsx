@@ -6,13 +6,14 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { OctagonAlert, PenIcon } from "lucide-react";
+import { OctagonAlert } from "lucide-react";
 import { Field, FieldLabel, FieldError } from "@/components/ui/field";
 import { Alert, AlertTitle } from "@/components/ui/alert";
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { FaGithub, FaGoogle } from "react-icons/fa";
 
 const formSchema = z.object({
   email: z.string().email({ message: "Invalid email address" }),
@@ -46,6 +47,7 @@ export const SignInView = () => {
       {
         email: data.email,
         password: data.password,
+        callbackURL: "/",
       },
       {
         onSuccess: () => {
@@ -117,20 +119,30 @@ export const SignInView = () => {
 
               <div className="grid grid-cols-2 gap-4">
                 <Button
+                  onClick={() => {
+                    authClient.signIn.social({
+                      provider: "google",
+                    });
+                  }}
                   disabled={pending}
-                  className="w-full"
+                  className="w-full cursor-pointer"
                   variant="outline"
                   type="button"
                 >
-                  Google
+                  <FaGoogle />
                 </Button>
                 <Button
+                  onClick={() => {
+                    authClient.signIn.social({
+                      provider: "github",
+                    });
+                  }}
                   disabled={pending}
-                  className="w-full"
+                  className="w-full cursor-pointer"
                   variant="outline"
                   type="button"
                 >
-                  Github
+                  <FaGithub />
                 </Button>
               </div>
 
